@@ -1,12 +1,10 @@
 import mongoose from "mongoose";
 
-const movieSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  genre: String,
-  duration: Number, // in minutes
-  language: String,
-  releaseDate: Date,
-  seatsAvailable: { type: Number, default: 100 } // default total seats
+const bookingSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  movie: { type: mongoose.Schema.Types.ObjectId, ref: "Movie", required: true },
+  showTime: { type: Date, required: true },
+  seatsBooked: { type: Number, required: true },
 }, { timestamps: true });
 
-export default mongoose.model("Movie", movieSchema);
+export default mongoose.model("Booking", bookingSchema);
