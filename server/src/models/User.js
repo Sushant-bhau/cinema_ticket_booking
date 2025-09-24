@@ -3,7 +3,7 @@ import Counter from "./counter.js";
 
 const userSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
+  lastName: { type: String, },
   age: { type: Number },
   gender: { type: String, enum: ["male", "female", "other"] },
   address: { type: String },
