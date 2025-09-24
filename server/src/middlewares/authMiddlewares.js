@@ -17,28 +17,17 @@ export const authMiddleware = (req, res, next) => {
   }
 };
 
-// ✅ Restrict route access to admins only
-export const adminMiddleware = (req, res, next) => {
-  if (!req.user) {
-    return res.status(401).json({ msg: "Not authenticated" });
-  }
+// ✅ Middleware to restrict route access based on role
+export const authorizeRole = (role) => {
+  return (req, res, next) => {
+    if (!req.user) {
+      return res.status(401).json({ msg: "Not authenticated" });
+    }
 
-  if (req.user.role !== "admin") {
-    return res.status(403).json({ msg: "Access denied: Admins only" });
-  }
+    if (req.user.role !== role) {
+      return res.status(403).json({ msg: `Access denied: ${role}s only` });
+    }
 
-  next();
-};
-
-// ✅ Restrict route access to normal users only
-export const userMiddleware = (req, res, next) => {
-  if (!req.user) {
-    return res.status(401).json({ msg: "Not authenticated" });
-  }
-
-  if (req.user.role !== "user") {
-    return res.status(403).json({ msg: "Access denied: Users only" });
-  }
-
-  next();
+    next();
+  };
 };
