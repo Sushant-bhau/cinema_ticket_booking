@@ -10,7 +10,7 @@ function Navbar({ onLoginClick, isLoggedIn, onLogout }) {
         </div>
         <nav className="nav-links">
           <a href="#home">Home</a>
-          <a href="#movies">Movies</a>
+          <a href="#movie">Movies</a>
           <a href="#theaters">Theaters</a>
           <a href="#releases">Releases</a>
         </nav>
