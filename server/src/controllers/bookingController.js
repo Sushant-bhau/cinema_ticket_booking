@@ -1,5 +1,6 @@
 import Booking from "../models/Booking.js";
 import Movie from "../models/Movie.js";
+import mongoose from "mongoose";
 
 // Create a booking
 export const bookTickets = async (req, res) => {
@@ -9,8 +10,16 @@ export const bookTickets = async (req, res) => {
       return res.status(400).json({ msg: "All fields are required" });
     }
 
+    // Check if movieID is valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(movieID)) {
+      return res.status(400).json({ msg: "Invalid movie ID" });
+    }
+
+    // Convert movieID to ObjectId
+    const movieObjectId = new mongoose.Types.ObjectId(movieID);
+
     // Find movie
-    const movie = await Movie.findOne({ movieID });
+    const movie = await Movie.findOne({ _id: movieObjectId });
     if (!movie) return res.status(404).json({ msg: "Movie not found" });
 
     // Find the show
@@ -24,9 +33,9 @@ export const bookTickets = async (req, res) => {
       return res.status(400).json({ msg: "Not enough seats available" });
     }
 
-    // Create booking
+    // Use req.user._id for the user (since it's set in authMiddleware)
     const booking = new Booking({
-      user: req.user._id,
+      user: req.user._id,  // Don't pass user in the request body
       movie: movie._id,
       showTime: show.showTime,
       seatsBooked: seatsRequested,
@@ -43,6 +52,7 @@ export const bookTickets = async (req, res) => {
     res.status(500).json({ msg: "Server error", error: err.message });
   }
 };
+
 
 // Get user bookings
 export const getUserBookings = async (req, res) => {
