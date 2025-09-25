@@ -13,7 +13,7 @@ export const registerUser = async (req, res) => {
     }
 
     // check if user already exists
-    const existingUser = await User.findOne({email});
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ msg: "User already exists" });
     }
@@ -24,30 +24,40 @@ export const registerUser = async (req, res) => {
 
     // set role
     let userRole = "user"; // default role
-   
+
     if (role === "admin") {
       const adminExists = await User.findOne({ role: "admin" });
 
       if (adminExists) {
         if (!req.user || req.user.role !== "admin") {
           return res.status(403).json({
-            msg: "Only an existing admin can create another admin."
+            msg: "Only an existing admin can create another admin.",
           });
-
         }
       }
-     
+
       userRole = "admin";
-      
     }
 
     // create user
-    const user = new User({ firstName, lastName, email, password: hashedPassword, role: userRole });
+    const user = new User({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+      role: userRole,
+    });
     await user.save();
 
     res.status(201).json({
       msg: "User registered successfully",
-      user: { id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email, role: user.role },
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+      },
     });
   } catch (err) {
     res.status(500).json({ msg: "Server error", error: err.message });
@@ -80,7 +90,12 @@ export const loginUser = async (req, res) => {
 
     res.json({
       token,
-      user: { id: user._id, name: user.name, email: user.email, role: user.role },
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     });
   } catch (err) {
     res.status(500).json({ msg: "Server error", error: err.message });

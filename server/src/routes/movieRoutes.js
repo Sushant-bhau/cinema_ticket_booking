@@ -1,6 +1,13 @@
 import express from "express";
-import { addMovie, getMovies, getMovieById } from "../controllers/movieController.js";
-import { authMiddleware , authorizeRole } from "../middlewares/authMiddlewares.js";
+import {
+  addMovie,
+  getAllMovies,
+  getMovieById,
+} from "../controllers/movieController.js";
+import {
+  authMiddleware,
+  authorizeRole,
+} from "../middlewares/authMiddlewares.js";
 
 const router = express.Router();
 
@@ -8,7 +15,7 @@ const router = express.Router();
 router.post("/", authMiddleware, authorizeRole("admin"), addMovie);
 
 // Public routes
-router.get("/", getMovies);
+router.get("/", getAllMovies);
 router.get("/:movieID", getMovieById);
 
 export default router;
