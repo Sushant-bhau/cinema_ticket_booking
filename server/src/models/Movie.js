@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 
 // Movie schema as per project requirements
 const movieSchema = new mongoose.Schema({
-  movieID: { type: Number, required: true, unique: true }, // MovieID
+  movieID: { type: Number, unique: true }, // MovieID
   Title: { type: String, trim: true },   // Title
   Year: { type: String, trim: true },    // Year
-  movieName: { type: String, required: true, trim: true }, // MovieName
+  movieName: { type: String, trim: true }, // MovieName
   language: { type: String, required: true, default: "English" }, // Language
   Runtime: { type: Number, required: true }, // Duration in minutes
   Director: { type: String },        // Optional: Director
