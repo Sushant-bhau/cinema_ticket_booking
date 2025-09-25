@@ -24,12 +24,21 @@ export const registerUser = async (req, res) => {
 
     // set role
     let userRole = "user"; // default role
+   
     if (role === "admin") {
-      // only allow admins to create admins
-      if (!req.user || req.user.role !== "admin") {
-        return res.status(403).json({ msg: "Only admins can create another admin" });
+      const adminExists = await User.findOne({ role: "admin" });
+
+      if (adminExists) {
+        if (!req.user || req.user.role !== "admin") {
+          return res.status(403).json({
+            msg: "Only an existing admin can create another admin."
+          });
+
+        }
       }
+     
       userRole = "admin";
+      
     }
 
     // create user
@@ -48,7 +57,7 @@ export const registerUser = async (req, res) => {
 // LOGIN
 export const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, firstName, lastName } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({ msg: "All fields are required" });

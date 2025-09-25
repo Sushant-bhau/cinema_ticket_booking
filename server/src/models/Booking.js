@@ -7,4 +7,5 @@ const bookingSchema = new mongoose.Schema({
   seatsBooked: { type: Number, required: true },
 }, { timestamps: true });
 
+
 export default mongoose.model("Booking", bookingSchema);
